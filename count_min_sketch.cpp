@@ -4,7 +4,6 @@
 # include <ctime>
 # include <limits>
 # include "count_min_sketch.hpp"
-
 using namespace std;
 
 /**
@@ -23,7 +22,7 @@ using namespace std;
 // ep -> error 0.01 < ep < 1 (the smaller the better)
 // gamma -> probability for error (the smaller the better) 0 < gamm < 1
 CountMinSketch::CountMinSketch(float ep, float gamm) {
-  if (!(0.01 <= ep && ep < 1)) {
+  if (!(0.009 <= ep && ep < 1)) {
     cout << "eps must be in this range: [0.01, 1)" << endl;
     exit(EXIT_FAILURE);
   } else if (!(0 < gamm && gamm < 1)) {
@@ -125,7 +124,4 @@ unsigned int CountMinSketch::hashstr(const char *str) {
   return hash;
 }
 
-int main() {
-  return 0;
-}
 

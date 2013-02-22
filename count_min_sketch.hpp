@@ -39,9 +39,6 @@ class CountMinSketch {
   // generate "new" aj,bj
   void genajbj(int **hashes, int i);
 
-  // generates a hash value for a string
-  // same as djb2 hash function
-  unsigned int hashstr(const char *str);
 public:
   // constructor
   CountMinSketch(float eps, float gamma);
@@ -57,6 +54,10 @@ public:
 
   // return total count
   unsigned int totalcount();
+
+  // generates a hash value for a string
+  // same as djb2 hash function
+  unsigned int hashstr(const char *str);
 
   // destructor
   ~CountMinSketch();
