@@ -57,11 +57,11 @@ constant or an integer. For example,
 To estimate the total count of a specific item, use
 `c.estimate(item)` where item is either a string constant
 or an integer. For example,
-   
-   c.estimate(20);
-   c.esimate("hello");
-   c.estimate("heylo");
-   // returns 2,0,2 respectively
+
+      c.estimate(20);
+      c.esimate("hello");
+      c.estimate("heylo");
+      // returns 2,0,2 respectively
 
 To retrieve the total count of all the items in the data
 structure, use `c.totalcount()`.
