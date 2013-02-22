@@ -50,9 +50,9 @@ To update the count of an item in the Count-Min sketch, use
 `c.update(item, int count)` where item is either a string
 constant or an integer. For example,
 
-   c.update("heylo", 1);
-   c.update(20, 2);
-   c.update("heylo", 1);
+	 c.update("heylo", 1);
+	 c.update(20, 2);
+	 c.update("heylo", 1);
 
 To estimate the total count of a specific item, use
 `c.estimate(item)` where item is either a string constant
