@@ -66,13 +66,19 @@ or an integer. For example,
 To retrieve the total count of all the items in the data
 structure, use `c.totalcount()`.
 
+Running the Tests
+-----------------
+
+To run the tests, invoke `make`. It produces the object file
+`countmin` which you can then call, like this: `./countmin`.
+
 References
 ----------
 * [Count-Min Sketch and its Applications](https://sites.google.com/site/countminsketch)
 
 * [Count-Min Sketch on Wikipedia] (https://en.wikipedia.org/wiki/Count-Min_sketch)
 
-* [Approximating Data with the Count-Min Data Structure] (http://dimacs.rutgers.edu/graham/pubs/papers/cmsoft.pdf)
+* [Approximating Data with the Count-Min Data Structure] (http://dimacs.rutgers.edu/~graham/pubs/papers/cmsoft.pdf)
 
-* [An improved Data Stream Summary: the Count-Min Sketch and its Applications] (http://www.research.att.com/people/Cormode.Graham/library/publicationsCormodeMuthukrishnan)
+* [An improved Data Stream Summary: the Count-Min Sketch and its Applications] (http://www.research.att.com/people/Cormode_Graham/library/publications/CormodeMuthukrishnan04CMLatin.pdf)
 
