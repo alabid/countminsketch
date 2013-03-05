@@ -1,15 +1,15 @@
 /** 
     Daniel Alabi
-    Count-Min Sketch Implementation based on paper by
-    Muthukrishnan and Cormode, 2004
+    Bloom filter implementation based on paper
+    by Almeida et al
 **/
 
 // define some constants
 # define LONG_PRIME 32993
 # define MIN(a,b)  (a < b ? a : b)
 
-/** CountMinSketch class definition here **/
-class CountMinSketch {
+/** BloomFilter class definition here **/
+class  BloomFilter{
   // width, depth 
   unsigned int w,d;
   
@@ -26,11 +26,11 @@ class CountMinSketch {
   // function
   unsigned int aj, bj;
 
-  // total count so far
+  // total count of items added so far
   unsigned int total; 
 
   // array of arrays of counters
-  int **C;
+  bool **C;
 
   // array of hash values for a particular item 
   // contains two element arrays {aj,bj}
@@ -41,18 +41,19 @@ class CountMinSketch {
 
 public:
   // constructor
-  CountMinSketch(float eps, float gamma);
+  BloomFilter(float eps, float gamma);
   
-  // update item (int) by count c
-  void update(int item, int c);
-  // update item (string) by count c
-  void update(const char *item, int c);
+  // adds item (int) to the bloomfilter
+  void add(int item);
+  // adds item (string) to the bloom filter
+  void add(const char *item);
 
-  // estimate count of item i and return count
-  unsigned int estimate(int item);
-  unsigned int estimate(const char *item);
+  // returns True if item is probably in the filter
+  // might return a false positive; never a false negative
+  bool contains(int item);
+  bool contains(const char *item);
 
-  // return total count
+  // returns the number of items stored in bloomfilter
   unsigned int totalcount();
 
   // generates a hash value for a string
@@ -60,7 +61,7 @@ public:
   unsigned int hashstr(const char *str);
 
   // destructor
-  ~CountMinSketch();
+  ~BloomFilter();
 };
 
 

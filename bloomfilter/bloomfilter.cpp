@@ -2,26 +2,25 @@
 # include <cmath>
 # include <cstdlib>
 # include <ctime>
-# include <limits>
-# include "count_min_sketch.hpp"
+# include "bloomfilter.hpp"
 using namespace std;
 
 /**
-   Class definition for CountMinSketch.
+   Class definition for BloomFilter.
    public operations:
-   // overloaded updates
-   void update(int item, int c);
-   void update(char *item, int c);
-   // overloaded estimates
-   unsigned int estimate(int item);
-   unsigned int estimate(char *item);
+   // overloaded add
+   void add(int item);
+   void add(char *item);
+   // overloaded contains
+   unsigned int contains(int item);
+   unsigned int contains(char *item);
 **/
 
 
-// CountMinSketch constructor
+// BloomFilter constructor
 // ep -> error 0.01 < ep < 1 (the smaller the better)
 // gamma -> probability for error (the smaller the better) 0 < gamm < 1
-CountMinSketch::CountMinSketch(float ep, float gamm) {
+BloomFilter::BloomFilter(float ep, float gamm) {
   if (!(0.009 <= ep && ep < 1)) {
     cout << "eps must be in this range: [0.01, 1)" << endl;
     exit(EXIT_FAILURE);
@@ -35,12 +34,12 @@ CountMinSketch::CountMinSketch(float ep, float gamm) {
   d = ceil(log(1/gamma));
   total = 0;
   // initialize counter array of arrays, C
-  C = new int *[d];
+  C = new bool *[d];
   unsigned int i, j;
   for (i = 0; i < d; i++) {
-    C[i] = new int[w];
+    C[i] = new bool[w];
     for (j = 0; j < w; j++) {
-      C[i][j] = 0;
+      C[i][j] = false;
     }
   }
   // initialize d pairwise independent hashes
@@ -52,8 +51,8 @@ CountMinSketch::CountMinSketch(float ep, float gamm) {
   }
 }
 
-// CountMinSkectch destructor
-CountMinSketch::~CountMinSketch() {
+// BloomFilter destructor
+BloomFilter::~BloomFilter() {
   // free array of counters, C
   unsigned int i;
   for (i = 0; i < d; i++) {
@@ -68,54 +67,56 @@ CountMinSketch::~CountMinSketch() {
   delete[] hashes;
 }
 
-// CountMinSketch totalcount returns the
-// total count of all items in the sketch
-unsigned int CountMinSketch::totalcount() {
+// add item (int) to filter
+void BloomFilter::add(int item) {
+  total = total + 1;
+  unsigned int hashval = NULL;
+  for (unsigned int j = 0; j < d; j++) {
+    hashval = (hashes[j][0]*item+hashes[j][1])%w;
+    C[j][hashval] = true;
+  }
+}
+
+// add item (string) to filter
+void BloomFilter::add(const char *str) {
+  int hashval = hashstr(str);
+  add(hashval);
+}
+
+// returns True if item (int) is probably in the bloom filter
+// returns False if item (int) is definitely not in the bloom filter
+bool BloomFilter::contains(int item) {
+  unsigned int hashval = NULL;
+  for (unsigned int j = 0; j < d; j++) {
+    hashval = (hashes[j][0]*item+hashes[j][1])%w;
+    if (!C[j][hashval]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// returns True if item (string) is probably in the bloom filter
+// returns False if item (string) is definitely not in the bloom filter
+bool BloomFilter::contains(const char *str) {
+  int hashval = hashstr(str);
+  return contains(hashval);
+}
+
+// returns the total count of items added to bloom filter
+unsigned int BloomFilter::totalcount() {
   return total;
 }
 
-// countMinSketch update item count (int)
-void CountMinSketch::update(int item, int c) {
-  total = total + c;
-  unsigned int hashval = NULL;
-  for (unsigned int j = 0; j < d; j++) {
-    hashval = (hashes[j][0]*item+hashes[j][1])%w;
-    C[j][hashval] = C[j][hashval] + c;
-  }
-}
-
-// countMinSketch update item count (string)
-void CountMinSketch::update(const char *str, int c) {
-  int hashval = hashstr(str);
-  update(hashval, c);
-}
-
-// CountMinSketch estimate item count (int)
-unsigned int CountMinSketch::estimate(int item) {
-  int minval = numeric_limits<int>::max();
-  unsigned int hashval = NULL;
-  for (unsigned int j = 0; j < d; j++) {
-    hashval = (hashes[j][0]*item+hashes[j][1])%w;
-    minval = MIN(minval, C[j][hashval]);
-  }
-  return minval;
-}
-
-// CountMinSketch estimate item count (string)
-unsigned int CountMinSketch::estimate(const char *str) {
-  int hashval = hashstr(str);
-  return estimate(hashval);
-}
-
 // generates aj,bj from field Z_p for use in hashing
-void CountMinSketch::genajbj(int** hashes, int i) {
+void BloomFilter::genajbj(int** hashes, int i) {
   hashes[i][0] = int(float(rand())*float(LONG_PRIME)/float(RAND_MAX) + 1);
   hashes[i][1] = int(float(rand())*float(LONG_PRIME)/float(RAND_MAX) + 1);
 }
 
 // generates a hash value for a sting
 // same as djb2 hash function
-unsigned int CountMinSketch::hashstr(const char *str) {
+unsigned int BloomFilter::hashstr(const char *str) {
   unsigned long hash = 5381;
   int c;
   while (c = *str++) {
