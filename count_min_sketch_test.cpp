@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
     "lady", "some", "hello", "none", "pie"
   };
   
-  CountMinSketch::CountMinSketch c(0.01, 0.1);
+  CountMinSketch c(0.01, 0.1);
   unsigned int i, total = 0;
   map<const char *, int> mapitems;
   map<const char *, int>::const_iterator it;
