@@ -79,7 +79,7 @@ void CountMinSketch::update(int item, int c) {
   total = total + c;
   unsigned int hashval = 0;
   for (unsigned int j = 0; j < d; j++) {
-    hashval = (hashes[j][0]*item+hashes[j][1])%w;
+    hashval = ((long)hashes[j][0]*item+hashes[j][1])%LONG_PRIME%w;
     C[j][hashval] = C[j][hashval] + c;
   }
 }
@@ -95,7 +95,7 @@ unsigned int CountMinSketch::estimate(int item) {
   int minval = numeric_limits<int>::max();
   unsigned int hashval = 0;
   for (unsigned int j = 0; j < d; j++) {
-    hashval = (hashes[j][0]*item+hashes[j][1])%w;
+    hashval = ((long)hashes[j][0]*item+hashes[j][1])%LONG_PRIME%w;
     minval = MIN(minval, C[j][hashval]);
   }
   return minval;
