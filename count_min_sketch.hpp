@@ -5,7 +5,7 @@
 **/
 
 // define some constants
-# define LONG_PRIME 4294967311l
+# define LONG_PRIME 4294967311ul
 # define MIN(a,b)  (a < b ? a : b)
 
 /** CountMinSketch class definition here **/
@@ -34,10 +34,10 @@ class CountMinSketch {
 
   // array of hash values for a particular item 
   // contains two element arrays {aj,bj}
-  int **hashes;
+  unsigned long **hashes;
 
   // generate "new" aj,bj
-  void genajbj(int **hashes, int i);
+  void genajbj(unsigned long **hashes, int i);
 
 public:
   // constructor
