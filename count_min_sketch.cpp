@@ -45,9 +45,9 @@ CountMinSketch::CountMinSketch(float ep, float gamm) {
   }
   // initialize d pairwise independent hashes
   srand(time(NULL));
-  hashes = new int* [d];
+  hashes = new unsigned long* [d];
   for (i = 0; i < d; i++) {
-    hashes[i] = new int[2];
+    hashes[i] = new unsigned long[2];
     genajbj(hashes, i);
   }
 }
@@ -79,7 +79,7 @@ void CountMinSketch::update(int item, int c) {
   total = total + c;
   unsigned int hashval = 0;
   for (unsigned int j = 0; j < d; j++) {
-    hashval = ((long)hashes[j][0]*item+hashes[j][1])%LONG_PRIME%w;
+    hashval = (hashes[j][0]*item+hashes[j][1])%LONG_PRIME%w;
     C[j][hashval] = C[j][hashval] + c;
   }
 }
@@ -95,7 +95,7 @@ unsigned int CountMinSketch::estimate(int item) {
   int minval = numeric_limits<int>::max();
   unsigned int hashval = 0;
   for (unsigned int j = 0; j < d; j++) {
-    hashval = ((long)hashes[j][0]*item+hashes[j][1])%LONG_PRIME%w;
+    hashval = (hashes[j][0]*item+hashes[j][1])%LONG_PRIME%w;
     minval = MIN(minval, C[j][hashval]);
   }
   return minval;
@@ -108,9 +108,9 @@ unsigned int CountMinSketch::estimate(const char *str) {
 }
 
 // generates aj,bj from field Z_p for use in hashing
-void CountMinSketch::genajbj(int** hashes, int i) {
-  hashes[i][0] = int(float(rand())*float(LONG_PRIME)/float(RAND_MAX) + 1);
-  hashes[i][1] = int(float(rand())*float(LONG_PRIME)/float(RAND_MAX) + 1);
+void CountMinSketch::genajbj(unsigned long** hashes, int i) {
+  hashes[i][0] = (unsigned long)(float(rand())*float(LONG_PRIME-2)/float(RAND_MAX) + 1);
+  hashes[i][1] = (unsigned long)(float(rand())*float(LONG_PRIME-2)/float(RAND_MAX) + 1);
 }
 
 // generates a hash value for a sting
