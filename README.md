@@ -4,7 +4,7 @@ Count-Min Sketch
 Count-Min Sketch is a probabilistic sub-linear space streaming algorithm
  which can be used to summarize a data stream in different ways. It's 
 mostly used to find **Heavy Hiiters** in a data set. This data structure
-is pretty recent. It was introduced in 2003. Sine then, it has inspired
+is pretty recent. It was introduced in 2003. Since then, it has inspired
 many applications, extensions, and variations.
 
 This probabilistic data structure was first proposed by Muthukrishnan
